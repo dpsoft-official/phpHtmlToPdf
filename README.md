@@ -8,8 +8,8 @@ Convert any url or html to pdf/image using google-chrome or chromium-browser
 $ composer require dpsoft/php-html-to-pdf
 ```
 ## Requirement
-This package uses google-chrome/chromium-browser to export.
- or example install chromium-browser on linux ubuntu:
+This package uses google-chrome/chromium-browser.
+for example install chromium-browser on linux ubuntu:
 ```bash
 ~ sudo apt install chromium-browser
 ```
