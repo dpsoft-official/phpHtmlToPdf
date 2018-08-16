@@ -2,7 +2,6 @@
   "name": "dpsoft/php-html-to-pdf",
   "description": "Convert any url or html to pdf/image using google-chrome or chromium-browser",
   "type": "library",
-  "license": "GPL-2",
   "authors": [
     {
       "name": "DaneshPajouhan",
