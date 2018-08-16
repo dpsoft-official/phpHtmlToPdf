@@ -36,5 +36,9 @@ $convertor->setUrl('http://google.com')->toPng('png/file/name.png');
 
 // you can set window size for png export
 $convertor->setUrl('http://google.com')->setWindow(1280,960)->toPng('png/file/name.png');
-
+```
+## Test
+Run test:
+```bash
+~ composer test
 ```
