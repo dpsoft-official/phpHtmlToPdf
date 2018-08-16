@@ -1,0 +1,33 @@
+{
+  "name": "dpsoft/php-html-to-pdf",
+  "description": "Convert any url or html to pdf/image using google-chrome or chromium-browser",
+  "type": "library",
+  "license": "GPL-2",
+  "authors": [
+    {
+      "name": "DaneshPajouhan",
+      "email": "dpsoft@dpsoft.ir"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^7.0",
+    "symfony/process": "^3.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dpsoft\\HtmlToPdf\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
+}
