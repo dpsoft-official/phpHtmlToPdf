@@ -19,18 +19,24 @@ class Converter
      * @var array
      */
     private $parameters;
+    /**
+     * @var bool
+     */
+    private $usePhpExec;
 
     /**
      * Converter constructor.
      *
      * @param string|null $chromeBinary custom chrome binary
+     * @param bool        $usePhpExec   use exec function to run shell command
      * @param array       $parameters
      */
-    public function __construct(string $chromeBinary = null, array $parameters = [])
+    public function __construct(string $chromeBinary = null, $usePhpExec = false, array $parameters = [])
     {
 
         $this->chromeBinary = $chromeBinary;
         $this->parameters = array_merge(['--headless', '--disable-gpu'], $parameters);
+        $this->usePhpExec = $usePhpExec;
     }
 
     /**
@@ -102,12 +108,8 @@ class Converter
     public function toPdf($pdfName)
     {
         $this->setParameters(["--print-to-pdf='$pdfName'"]);
-        $stat = $this->runCommand();
-        if (!$stat->isSuccessful()) {
-            throw new \Exception($stat->getOutput(), 2);
-        }
 
-        return true;
+        return $this->runCommand();
     }
 
     /**
@@ -121,24 +123,31 @@ class Converter
     public function toPng($pngName)
     {
         $this->setParameters(["--screenshot='$pngName'"]);
-        $stat = $this->runCommand();
-        if (!$stat->isSuccessful()) {
-            throw new \Exception($stat->getOutput(), 2);
-        }
 
-        return true;
+        return $this->runCommand();
     }
 
     /**
-     * @return Process
+     * @return bool
      * @throws \Exception
      */
     private function runCommand()
     {
-        $command = new Process($this->checkChromeBinary()." ".implode(' ', $this->parameters));
-        $command->run();
+        $shellCommand = $this->checkChromeBinary()." ".implode(' ', $this->parameters);
+        if ($this->usePhpExec) {
+            exec($shellCommand, $out, $stat);
+            if ($stat !== 0) {
+                throw new \Exception(implode("\n", $out), 2);
+            }
+        } else {
+            $command = new Process($shellCommand);
+            $command->run();
+            if (!$command->isSuccessful()) {
+                throw new \Exception($command->getOutput(), 2);
+            }
+        }
 
-        return $command;
+        return true;
     }
 
     /**
@@ -222,6 +231,25 @@ class Converter
     {
         $this->setParameters(["--user-agent='$agent'"]);
 
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsePhpExec(): bool
+    {
+        return $this->usePhpExec;
+    }
+
+    /**
+     * @param bool $usePhpExec
+     *
+     * @return Converter
+     */
+    public function setUsePhpExec(bool $usePhpExec)
+    {
+        $this->usePhpExec = $usePhpExec;
         return $this;
     }
 }

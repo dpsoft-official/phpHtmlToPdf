@@ -17,7 +17,7 @@ class ConverterTest extends TestCase
     {
         $this->converter = (new Converter())->setHideScrollbar()->setWindowSize()->setUserAgent(
             'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-        )->setChromeBinary('chromium-browser');
+        );
 
         return parent::run($result);
     }
@@ -32,7 +32,7 @@ class ConverterTest extends TestCase
     {
         $pdfFile = sys_get_temp_dir()."/test_pdf.pdf";
         $this->deleteFile($pdfFile);
-        $result = $this->converter->setUrl('http://127.0.0.1:8000/user/122/sa')->toPdf($pdfFile);
+        $result = $this->converter->setUrl('http://google.com')->toPdf($pdfFile);
         $this->assertTrue($result);
         $this->assertFileExists($pdfFile);
     }
@@ -41,9 +41,18 @@ class ConverterTest extends TestCase
     {
         $pngFile = sys_get_temp_dir()."/test_png.png";
         $this->deleteFile($pngFile);
-        $result = $this->converter->setUrl('http://127.0.0.1:8000/user/122/sa')->toPng($pngFile);
+        $result = $this->converter->setUrl('http://google.com')->toPng($pngFile);
         $this->assertTrue($result);
         $this->assertFileExists($pngFile);
+    }
+
+    public function testToPdfWithUsePhpExec()
+    {
+        $pdfFile = sys_get_temp_dir()."/test_pdf_use_php_exec.pdf";
+        $this->deleteFile($pdfFile);
+        $result = $this->converter->setUsePhpExec(true)->setUrl('http://google.com')->toPdf($pdfFile);
+        $this->assertTrue($result);
+        $this->assertFileExists($pdfFile);
     }
 
     private function deleteFile($file)
